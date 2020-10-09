@@ -1,8 +1,7 @@
 const crypto = require('crypto')
 const fs = require('fs')
 
-const encryptRSA = (toEncrypt) => {
-  const publicKey = fs.readFileSync("./public.key", 'utf8')
+const encryptRSA = (toEncrypt, publicKey) => {
   const buffer = Buffer.from(toEncrypt, 'utf8')
   const encrypted = crypto.publicEncrypt(publicKey, buffer)
   return encrypted.toString('base64')
