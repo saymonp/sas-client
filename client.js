@@ -1,4 +1,5 @@
 const axios = require('axios');
+const crypto = require('crypto');
 
 const {
     encrypt
@@ -19,7 +20,8 @@ const createMessage = async (content, key) => {
 
     const message = {
         hash,
-        key: keyEnc
+        key: keyEnc,
+        hash_validation: crypto.createHash('sha256').update(content).digest('base64')
     }
 
     const response = await axios.post('http://localhost:3333/api/v1/createMessage',
