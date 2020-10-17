@@ -2,13 +2,14 @@ const axios = require('axios');
 const crypto = require('crypto');
 
 const {
-    encrypt
+    encrypt, decrypt
 } = require('./crypt');
 const {
     encryptRSA
 } = require('./cryptRSA');
 
 const createMessage = async (content, key) => {
+    try{
     const session = await axios.post('http://localhost:3333/api/v1/login', {
         email: "email@gmail.com",
         password: "banana123"
@@ -31,14 +32,18 @@ const createMessage = async (content, key) => {
             }
         });
 
-    console.log(response.data.id);
+    console.log("Id da mensagem:", response.data.id);
 
     const msgShow = await axios.get(`http://localhost:3333/api/v1/showMessage/${response.data.id}`, {
         headers: {
             Authorization: `Bearer ${session.data.token}`
         }
     });
-    console.log(msgShow.data);
+    const decryptMessage = decrypt(msgShow.data.message, key);
+    console.log("Mensagem plana:", decryptMessage);
+} catch (err) {
+    console.log(err);
+}
 }
 
 const key = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
